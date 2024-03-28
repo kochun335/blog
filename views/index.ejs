@@ -1,0 +1,35 @@
+<%- include("partials/header.ejs") %>
+<div class="py-3" id="new_post">
+    <form id="postform" action="/submit" method="POST">
+        <label for="posttitle">Title:</label><br>
+        <input class="form-control" type="text" id="posttitle" name="posttitle" required><br>
+        <label for="postcontent">Content:</label><br>
+        <textarea class="form-control" rows="4" cols="50" name="postcontent" form="postform" required></textarea><br>
+        <input type="submit" value="Post">
+    </form>
+</div>
+    <% if (locals.blogList) { %>
+        <% console.log(`blogList.length: ${blogList.length}`) %>
+        <% console.log(`blogList[0]]: ${blogList[0]}`) %>
+        <% for (var i = blogList.length-1; i >=0; i--){%>
+            
+            <div class="py-5" id="blog_<%= i %>">
+                <h2><%= blogList[i]["title"] %></h2>
+                <p><%= blogList[i]["content"] %></p>
+                
+                <button onclick="edit('blog_<%= i %>')">Edit</button>
+                <form class="form_for_dlt" id="delete_blog_<%=i %>" action="/delete" method="POST" style="display: none">
+                    <input name="blog_id" value="<%= i %>">
+                </form>
+                <button form="delete_blog_<%=i %>">Delete</button>
+                <span class="date">
+                <% if (blogList[i]["modified"]) { %>
+                    Last modified:
+                <% } else { %>
+                    Posted:
+                <% } %>
+                <%= blogList[i]["time"] %></span>
+            </div>
+        <% } %>
+    <%} %>
+    <%- include("partials/footer.ejs") %>
